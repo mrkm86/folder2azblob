@@ -5,8 +5,19 @@ var config = require('./config.json')
 
 var containerName = config["container_name"];
 var localPath = config["folder"];
-var extentFilter = config["extention"].replace('*', '');
+var extentFilter = config["extention"];
 var connectionString = config["account"];
+
+if  (connectionString == undefined || extentFilter == undefined || localPath == undefined || containerName == undefined) {
+    console.log('Config error');
+    return;
+}
+
+if  (connectionString == "" || extentFilter == "" || localPath == "" || containerName == "") {
+    console.log('Config error');
+    return;
+}
+
 var blobSvc = azure.createBlobService(connectionString); 
 
 /** Create container */

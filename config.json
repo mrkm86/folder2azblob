@@ -2,5 +2,6 @@
   "folder": "/home/desk/Desktop/BLOB/images",
   "extention": "*.PNG",
   "container_name": "image",
+  "time": "1000",
   "account": "DefaultEndpointsProtocol=https;AccountName=storageimagetoblob;AccountKey=vO0C2JwmisdLi4ppcn0wA0VNrB6Ewlaj9Wy0eQv0RjEaSvZiGbxxqW52eKLdrF/+gWtSdwHLYsjmaBPKG69Hvg==;EndpointSuffix=core.windows.net"
 }

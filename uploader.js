@@ -5,10 +5,16 @@ var config = require('./config.json')
 
 var containerName = config["container_name"];
 var localPath = config["folder"];
-var extentFilter = config["extention"].replace('*', '');
+var extentFilter = config["extention"];
 var connectionString = config["account"];
-var blobSvc = azure.createBlobService(connectionString);
+var time = config["time"];
 var iMaxRecord = 0; 
+var isStart = false;
+
+if  (connectionString == undefined || extentFilter == undefined || localPath == undefined || containerName == undefined) {
+    console.log('Config error');
+    return;
+}
 
 if  (connectionString == "" || extentFilter == "" || localPath == "" || containerName == "") {
     console.log('Config error');
@@ -24,6 +30,13 @@ if  (fs.lstatSync(localPath).isDirectory() == false) {
     console.log('Folder path is not a directory');
     return;
 }
+
+if (time == undefined || time == "") {
+    time = 1000;
+}
+
+extentFilter = extentFilter.replace('*', '');
+var blobSvc = azure.createBlobService(connectionString);
 
 /** Find all files by extention         */
 /** pathFolder          : Folder path   */
@@ -87,13 +100,21 @@ function uploadBlob(strContainer, blobName, strLocalFile) {
             iMaxRecord--;
             if (iMaxRecord == 0) {
                 console.log('Upload Blob End...');
+                isStart = false;
             }
         }
     });
 }
 
 function main(){
+
+    if (isStart) {
+        return;
+    }
+
     console.log('Upload Blob Start...');
+    isStart = true;
+    
     //Create container if not exist
     createContainer(function(){
         if (containerName != "") {
@@ -102,6 +123,7 @@ function main(){
 
             if (iMaxRecord == 0) {
                 console.log('Upload Blob End...');
+                isStart = false;
             }
 
             for (var i = 0; i < arrResult.length; i++) {
@@ -120,5 +142,5 @@ main();
 setInterval(function() {
     //Excute upload blob from file
     main();
-}, 60000);
+}, time);
 
